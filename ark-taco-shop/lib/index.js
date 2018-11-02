@@ -15,7 +15,7 @@ exports.plugin = {
       var addr = server.address();
       var bind =
         typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-      logger.info('Listening on ' + bind);
+      logger.info(`ark-taco-shop-api available and listening on ${bind}`);
     }
 
     try {

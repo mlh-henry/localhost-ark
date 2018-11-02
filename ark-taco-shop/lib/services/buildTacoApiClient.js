@@ -13,16 +13,28 @@ async function createAndPostTransaction (
   const client = new Client(tacoApiUri, version);
   const { price = 0 } = params;
 
+  const senderWallet = await getWallet(sender)
+  const recipientWallet = await getWallet(recipient)
+
   try {
     const transaction = await postTransaction({
-      recipient,
-      senderPublicKey: sender,
+      recipient: recipientWallet.address,
+      senderPublicKey: senderWallet.address,
       amount: price,
       passphrase
     });
     return transaction;
   } catch (error) {
     throw error;
+  }
+
+  async function getWallet(address) {
+    try {
+      const { data } = await client.resource('wallets').get(address)
+      return data.data
+    } catch (error) {
+      throw error;
+    }
   }
 
   async function postTransaction ({ amount, recipient, senderPublicKey, passphrase }) {
