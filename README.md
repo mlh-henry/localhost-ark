@@ -2,7 +2,7 @@
 
 ## Requirements
 Make sure you’ve got a recent version of:
-  - [Node.js](https://nodejs.org/) v9.11.1 - We suggest using [NVM](https://github.com/creationix/nvm) to handle it
+  - [Node.js](https://nodejs.org/) - We suggest using [NVM](https://github.com/creationix/nvm) to handle it
   - [Docker and Docker-Compose](https://www.docker.com/) - We use docker to run our database. You can skip it if you have [Postgres](https://www.postgresql.org/) installed locally.
   - [Yarn](https://yarnpkg.com/en/) - Fast, Reliable, and secure dependency management.
   - [Lerna](https://lernajs.io/) - A tool for managing JavaScript projects with multiple packages.
