@@ -58,10 +58,32 @@ async function createAndPostTransaction (
   }
 }
 
+async function fetchTransactions(tacoApiUri, sender) {
+  const client = new Client(tacoApiUri, version);
+  const { data: { data: transactions = [] } = {} } = await client.resource('transactions').all()
+  const filteredTransactions = (transactions || []).filter(function (transaction) {
+    return !!transaction.vendorField && transaction.sender === sender;
+  });
+  return filteredTransactions.map(function (transaction) {
+    try {
+      return { ...transaction, vendorField: JSON.parse(transaction.vendorField) }
+    } catch (err) {
+      return transaction;
+    }
+  });
+}
+
 module.exports = function buildTacoApiClient (config) {
   const { sender, passphrase, recipient, uri } = config;
 
   return {
+    listTransactions: async function listTransactions() {
+      try {
+        return fetchTransactions(uri, sender);
+      } catch (error) {
+        throw error;
+      }
+    },
     postTransaction: async function postTransaction (params) {
       try {
         const transaction = await createAndPostTransaction(

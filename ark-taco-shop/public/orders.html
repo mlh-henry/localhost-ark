@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="active-menu" content="home">
+  <meta name="active-menu" content="orders">
   <meta name="author" content="Halisson Bruno Vitor">
   <meta charset="utf-8">
   <title>Ark Taco Shop</title>
@@ -23,18 +23,20 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/inventory">Inventory</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/orders">Orders</a>
           </li>
         </ul>
       </div>
     </nav>
   </header>
 
-  <main id="main" class="main" role="main">
+  <div id="alerts"></div>
+
+  <main class="main" role="main">
     <div id="alerts"></div>
 
     <header class="text-center">
@@ -43,39 +45,27 @@
 
     <div class="container">
       <header>
-        <h3 class="text-center">Inventory</h3>
+        <h3 class="text-center">Last Orders</h3>
       </header>
 
-      <div class="code-container live__scroll">
-        <h4>Template</h4>
-        <code>code,name,description,imageUrl,price,quantity</code>
-
-        <h4>Example</h4>
-        <code>
-          taco 1,Delicious Taco, So good,https://www.deltaco.com/images/food/menu/thumbs/tacos/thumb_tacos.jpg,10.00,10
-        </code>
-        <code>
-          taco 2,Delicious Taco, So good,https://www.deltaco.com/images/food/menu/thumbs/tacos/thumb_tacos.jpg,10.00,11
-        </code>
-        <code>
-          taco 3,Delicious Taco, So good,https://www.deltaco.com/images/food/menu/thumbs/tacos/thumb_tacos.jpg,10.00,11
-        </code>
-      </div>
-
-      <form id="products-form">
-        <div class="form-group">
-          <label for="products">Products File</label>
-          <input type="file" class="form-control" id="productsFile" aria-describedby="productsFileHelp" placeholder="Upload a CSV with a list of products">
-          <small id="productsFileHelp" class="form-text text-muted">The list of products should follow the template shown below</small>
-        </div>
-
-        <div id="productsPreview" class="card-columns products-container"></div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+      <table class="table" id="orders">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3" class="text-center">
+              Your orders will be displayed here!
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </main>
-
   <!-- FOOTER -->
   <footer class="container footer bg-light">
     <div class="logos text-center">
@@ -102,7 +92,7 @@
 
 <script src="./javascripts/smoothScroll.js"></script>
 <script src="./javascripts/api.js"></script>
-<script src="./javascripts/csvParser.js"></script>
-<script src="./javascripts/inventory.js"></script>
 <script src="./javascripts/alerts.js"></script>
+
+<script src="./javascripts/orders.js"></script>
 </html>

@@ -18,7 +18,7 @@ function buildApp (tacoApiConfig) {
   app.use(express.json());
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  app.use('/api/orders', async function (req, res, next) {
+  app.post('/api/orders', async function (req, res, next) {
     try {
       const tacoApiClient = buildTacoApiClient(tacoApiConfig);
       const transaction = await tacoApiClient.postTransaction(req.body)
@@ -28,11 +28,21 @@ function buildApp (tacoApiConfig) {
     }
   });
 
-  app.use('/inventory', function (req, res) {
-    res.sendFile(path.join(__dirname, '..', '/public/inventory.html'));
+  app.get('/api/orders', async function (req, res, next) {
+    try {
+      const tacoApiClient = buildTacoApiClient(tacoApiConfig);
+      const results = await tacoApiClient.listTransactions()
+      res.json({ results: results });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   });
 
-  app.use('/', function (req, res) {
+  app.get('/orders', function (req, res) {
+    res.sendFile(path.join(__dirname, '..', '/public/orders.html'));
+  });
+
+  app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '..', '/public/index.html'));
   });
 
@@ -47,7 +57,7 @@ function buildApp (tacoApiConfig) {
 
     // render the error page
     res.status(err.status || 500);
-    res.text('Internal Server Error!');
+    res.send('Internal Server Error!');
   });
 
   return app;

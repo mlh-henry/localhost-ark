@@ -9,33 +9,14 @@ const Api = (function () {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
-        // "Content-Type": "application/x-www-form-urlencoded",
       },
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      redirect: 'follow',
+      referrer: 'no-referrer',
+      body: JSON.stringify(data)
     });
   }
 
   return {
-    createInventory (products) {
-      return postData(`${API_URL}/taco/inventory`, products)
-        .then(async function (response) {
-          if (!response.ok) {
-            throw new Error(
-              `Error (${response.status}): ${await response.text()}`
-            );
-          }
-          return response.json();
-        })
-        .then(function (response) {
-          if (!response) {
-            throw new Error(`Error (${response.status})`);
-          }
-          return response.results;
-        });
-    },
-
     createOrder (order) {
       return postData(`${API_URL}/orders`, { ts: Date.now(), ...order })
         .then(async function (response) {
@@ -51,6 +32,26 @@ const Api = (function () {
         })
         .catch(function (error) {
           const message = 'Error creating order - ' + error.message;
+          console.error(message);
+          throw message;
+        });
+    },
+
+    getOrders () {
+      return fetch(`${API_URL}/orders`)
+        .then(async function (response) {
+          if (!response.ok) {
+            throw new Error(
+              `Error (${response.status}): ${await response.text()}`
+            );
+          }
+          return response.json();
+        })
+        .then(function (response) {
+          return response.results;
+        })
+        .catch(function (error) {
+          const message = 'Error fetching orders - ' + error.message;
           console.error(message);
           throw message;
         });
