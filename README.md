@@ -160,6 +160,7 @@ We will be using `testnet` as a local network to run ARK. To configure it, modif
 Notes:
 * Make sure to change the `inventoryApi.uri` property to set to the IP address of the `server`.
 * Make sure to configure the `inventoryApi.sender` and `inventoryApi.passphrase` properly. You can find valid passphrases in the testnet config file `core/packages/core/lib/config/testnet/delegates.json`. Use [ARK Desktop Wallet](https://github.com/ArkEcosystem/desktop-wallet/releases) to import the passphare and get the wallet's address.
+* To register the client as a node of the ARK network, change the file `core/packages/core/lib/config/testnet/peers.json` and add server's ip to the list.
 
 ##### Install dependencies
 
