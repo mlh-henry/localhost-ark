@@ -8,7 +8,7 @@ module.exports = {
     port: process.env.ARK_INVENTORY_API_DATABASE_PORT || 5432,
     username: process.env.ARK_INVENTORY_API_DATABASE_USER || 'ark',
     password: process.env.ARK_INVENTORY_API_DATABASE_PASSWORD || 'password',
-    database: process.env.ARK_INVENTORY_API_DATABASE_NAME || 'ark_bridgechain'
+    database: process.env.ARK_INVENTORY_API_DATABASE_NAME || 'ark_testnet'
   },
   server: {
     enabled: process.env.ARK_INVENTORY_API_SERVER_ENABLED || true,
