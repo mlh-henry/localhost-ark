@@ -42,10 +42,11 @@ module.exports = async config => {
 
     server.route({
       method: 'GET',
-      path: '/{param*}',
+      path: '/public/{param*}',
       handler: {
         directory: {
           path: path.join(__dirname, 'public'),
+          listing: true,
           index: ['index.html', 'default.html']
         }
       }
