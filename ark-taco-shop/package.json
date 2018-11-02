@@ -1,0 +1,50 @@
+{
+  "name": "@arkecosystem/ark-taco-shop",
+  "description": "Provides a Taco Shop UI for Ark Core",
+  "version": "0.1.0",
+  "private": true,
+  "contributors": [
+    "Halisson Bruno <halissonvit@gmail.com>"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "cross-env DEBUG=ark-taco-shop:* nodemon bin/www",
+    "build:docs": "../../node_modules/.bin/jsdoc -c jsdoc.json",
+    "test": "ARK_ENV=test jest --runInBand --detectOpenHandles",
+    "test:coverage": "ARK_ENV=test jest --coverage --runInBand --detectOpenHandles",
+    "test:debug": "ARK_ENV=test node --inspect-brk ../../node_modules/.bin/jest --runInBand --watch",
+    "test:watch": "ARK_ENV=test jest --runInBand --watch",
+    "test:watch:all": "ARK_ENV=test jest --runInBand --watchAll",
+    "lint": "eslint ./ --fix",
+    "depcheck": "depcheck ./"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "depcheck": "^0.6.9",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "jest": "^23.1.0",
+    "jest-extended": "^0.7.2",
+    "jsdoc": "^3.5.5",
+    "nodemon": "^1.18.5",
+    "regenerator-runtime": "^0.11.1",
+    "standard": "^11.0.1",
+    "winston": "^3.1.0"
+  },
+  "dependencies": {
+    "@arkecosystem/client": "^0.1.10",
+    "@arkecosystem/crypto": "^0.2.3",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "http-proxy-middleware": "^0.19.0",
+    "morgan": "~1.9.0"
+  }
+}
