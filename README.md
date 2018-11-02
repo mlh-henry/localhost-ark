@@ -13,8 +13,8 @@ Make sure you’ve got a recent version of:
 To begin, create a root folder to contain the ark core and the ark-taco-shop components.
 
 ```sh
-mkdir ark
-cd ark
+mkdir ~/ark
+cd ~/ark
 ```
 
 PS: From now on, all the commands will assume you are starting from the folder `ark` create in the steps below.
@@ -22,12 +22,14 @@ PS: From now on, all the commands will assume you are starting from the folder `
 ### ARK Core v2
 Clone the `ArkEcosystem/core` repository:
 ```sh
+cd ~/ark
 git clone https://github.com/ArkEcosystem/core
 ```
 ### Database
 We will use ARK core's docker files to make it easier to create/manage the database. If you prefer to use postgres directly, skip the section below and create a new database called `ark_testnet`.
 ##### Creating database using docker
 ```sh
+cd ~/ark
 cd core/docker/development
 docker-compose up -d
 docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
@@ -35,6 +37,7 @@ docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testn
 
 If you need to remove it, you can run the following:
 ```sh
+cd ~/ark
 cd core/docker/development
 sh purge.sh
 ```
@@ -42,6 +45,7 @@ sh purge.sh
 ### Ark Taco Shop Plugins
 Clone the `MLH/localhost-ark` repository:
 ```sh
+cd ~/ark
 git clone https://github.com/MLH/localhost-ark
 ```
 
@@ -54,6 +58,7 @@ This repository contains two different plugins:
 #### The server - Ark Taco Shop Api
 To install the server, copy the `ark-taco-shop-api` plugin to the ARK core's `plugins` folder:
 ```sh
+cd ~/ark
 cp -rf localhost-ark/ark-taco-shop-api core/plugins/
 ```
 
@@ -90,12 +95,14 @@ Make sure to change the `database` properties to use the database configs you ha
 ##### Install dependencies
 
 ```sh
+cd ~/ark
 cd core
 lerna bootstrap
 ```
 
 ##### Run the application
 ```sh
+cd ~/ark
 cd core/packages/core
 yarn full:testnet
 ```
@@ -129,6 +136,7 @@ There is an example file:  `localhost-ark/ark-taco-shop-api/inventory-file-examp
 #### The client - Ark Taco Shop
 To install the client, copy the `ark-taco-shop` plugin to the ARK core's `plugins` folder:
 ```sh
+cd ~/ark
 cp -rf localhost-ark/ark-taco-shop core/plugins/
 ```
 
@@ -165,12 +173,14 @@ Notes:
 ##### Install dependencies
 
 ```sh
+cd ~/ark
 cd core
 lerna bootstrap
 ```
 
 ##### Run the application
 ```sh
+cd ~/ark
 cd core/packages/core
 yarn full:testnet
 ```
