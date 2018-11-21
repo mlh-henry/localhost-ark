@@ -64,7 +64,7 @@ We will be using `testnet` as a local network to run ARK. To configure it, modif
   '@arkecosystem/core-config': {},
   ...
   },
-  '@arkecosystem/ark-taco-shop-api': {
+  '@mlh/ark-taco-shop-api': {
     enabled: process.env.ARK_INVENTORY_API_ENABLED || true,
     database: {
       dialect: 'postgres',
@@ -142,7 +142,7 @@ We will be using `testnet` as a local network to run ARK. To configure it, modif
   '@arkecosystem/core-config': {},
   ...
   },
-  '@arkecosystem/ark-taco-shop': {
+  '@mlh/ark-taco-shop': {
     enabled: process.env.ARK_TACO_SHOP_ENABLED || true,
     server: {
       enabled: process.env.ARK_TACO_SHOP_SERVER_ENABLED || true,
