@@ -58,7 +58,7 @@ cp -rf localhost-ark/ark-taco-shop-api core/plugins/
 ##### Configuration
 
 We will be using `testnet` as a local network to run ARK. To configure it, modify the file ` core/packages/core/lib/config/testnet/plugins.js` and copy the configuration object from of the file `localhost-ark/ark-taco-shop-api/lib/defaults.js`, and add it like showed below:
-```json
+```js
 {
   '@arkecosystem/core-event-emitter': {},
   '@arkecosystem/core-config': {},
@@ -104,7 +104,7 @@ The output may be a bit verbose, but you should see the message `ark-taco-shop-a
 
 To test it, make sure the url http://0.0.0.0:5000/api/taco/products returns a valid json, like the one below:
 
-```json
+```js
 {
   "results": [],
   "totalCount": 0
@@ -136,7 +136,7 @@ cp -rf localhost-ark/ark-taco-shop core/plugins/
 ##### Configuration
 
 We will be using `testnet` as a local network to run ARK. To configure it, modify the file ` core/packages/core/lib/config/testnet/plugins.js` and copy the configuration object from of the file `localhost-ark/ark-taco-shop/lib/defaults.js`, and add it like showed below:
-```json
+```js
 {
   '@arkecosystem/core-event-emitter': {},
   '@arkecosystem/core-config': {},
