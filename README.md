@@ -113,7 +113,7 @@ To test it, make sure the url http://0.0.0.0:5000/api/taco/products returns a va
 
 ##### Add products to inventory
 
-Access http://0.0.0.0:5000/api/taco/products and use the form to submit a csv. It expects the following format:
+Access http://0.0.0.0:5000/inventory and use the form to submit a csv. It expects the following format:
 
 ```csv
 PRODUCT_CODE1,PRODUCT_NAME1,PRODUCT_DESCRIPTION,PRODUCT_IMAGE_URL,PRODUCT_PRICE_IN_DARK,QUANTITY

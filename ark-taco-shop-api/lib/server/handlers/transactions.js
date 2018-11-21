@@ -8,10 +8,8 @@ const container = require('@arkecosystem/core-container')
 const logger = container.resolvePlugin('logger');
 
 function getCoreApiUri (path, search) {
-  const coreApi = container.resolvePlugin('api');
-  const { settings } = coreApi;
-  const { protocol = 'http', host, port } = settings;
-  return `${protocol}://${host}:${port}${path || ''}${search || ''}`;
+  const coreApi = container.resolveOptions('api');
+  return `http://${coreApi.host}:${coreApi.port}${path || ''}${search || ''}`;
 }
 
 function getProxyOptions (request) {

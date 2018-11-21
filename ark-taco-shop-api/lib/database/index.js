@@ -58,11 +58,11 @@ class Database {
   }
 
   findProductById (id) {
-    return this.product.findById(id)
+    return this.product.findByPk(id)
   }
 
   async updateProduct (id, data) {
-    const product = await this.product.findById(id);
+    const product = await this.product.findByPk(id);
 
     return product.update(data);
   }
