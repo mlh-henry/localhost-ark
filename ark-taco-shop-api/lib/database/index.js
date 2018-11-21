@@ -35,7 +35,7 @@ class Database {
 
     this.connection = new Sequelize({
       ...config,
-      ...{ operatorsAliases: Op }
+      ...{ operatorsAliases: Op, logging: false }
     });
 
     try {

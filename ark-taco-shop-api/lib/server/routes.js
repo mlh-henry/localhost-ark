@@ -7,9 +7,7 @@ const inventoryHandlers = require('./handlers/inventory');
 const transactionsHandlers = require('./handlers/transactions');
 
 const register = async (server, options) => {
-  const coreApi = container.resolvePlugin('api');
-  const { settings } = coreApi;
-  const { protocol = 'http', host, port } = settings;
+  const coreApi = container.resolveOptions('api');
 
   server.route([
     {
@@ -34,9 +32,9 @@ const register = async (server, options) => {
       path: '/{path*}',
       handler: {
         proxy: {
-          protocol,
-          host,
-          port,
+          protocol: 'http',
+          host: coreApi.host,
+          port: coreApi.port,
           passThrough: true
         }
       }
