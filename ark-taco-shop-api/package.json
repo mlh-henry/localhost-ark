@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@arkecosystem/ark-taco-shop-api",
+  "name": "@mlh/ark-taco-shop-api",
   "description": "Provides an API for taco orders on the Ark Core",
   "version": "0.0.1",
   "contributors": [

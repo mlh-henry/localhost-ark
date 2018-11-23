@@ -1,5 +1,5 @@
 {
-  "name": "@arkecosystem/ark-taco-shop",
+  "name": "@mlh/ark-taco-shop",
   "description": "Provides a Taco Shop UI for Ark Core",
   "version": "0.1.0",
   "private": true,
