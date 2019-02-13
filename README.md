@@ -13,7 +13,17 @@ Make sure you’ve got a recent version of:
 To begin, create a root folder to contain the ark core and the ark-taco-shop components.
 
 ```sh
-git clone https://github.com/ArkEcosystem/core ~/core
+git clone https://github.com/arkecosystem/core
+cd core
+
+npm i -g yarn
+
+git fetch https://github.com/arkecosystem/core develop:develop
+git checkout develop
+
+yarn setup
+
+yarn docker ark
 ```
 
 ### Database
@@ -23,11 +33,9 @@ We will use ARK core's docker files to make it easier to create/manage the datab
 ##### Creating database using docker
 
 ```sh
-cd ~/core/docker/production/devnet
+cd ~/core/docker/development/devnet
 docker login
-# enter dockerhub login
-# enter dockerhub password
-docker-compose up -d
+docker-compose up
 docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
 ```
 
