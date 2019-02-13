@@ -23,7 +23,10 @@ We will use ARK core's docker files to make it easier to create/manage the datab
 ##### Creating database using docker
 
 ```sh
-cd ~/core/docker/development
+cd ~/core/docker/production/devnet
+docker login
+# enter dockerhub login
+# enter dockerhub password
 docker-compose up -d
 docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
 ```
