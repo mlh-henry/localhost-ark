@@ -7,21 +7,29 @@
     "Halisson Bruno <halissonvit@gmail.com>"
   ],
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "dist/index",
+  "types": "dist/index",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build:docs": "../../node_modules/.bin/jsdoc -c jsdoc.json",
-    "test": "ARK_ENV=test jest --runInBand --detectOpenHandles",
-    "test:coverage": "ARK_ENV=test jest --coverage --runInBand --detectOpenHandles",
-    "test:debug": "ARK_ENV=test node --inspect-brk ../../node_modules/.bin/jest --runInBand --watch",
-    "test:watch": "ARK_ENV=test jest --runInBand --watch",
-    "test:watch:all": "ARK_ENV=test jest --runInBand --watchAll",
-    "lint": "eslint ./ --fix",
-    "depcheck": "depcheck ./"
+    "start": "tsc && node ./bin/www",
+    "compile": "./node_modules/typescript/bin/tsc",
+    "build": "yarn clean && yarn build:prepare && yarn compile && yarn build:assets",
+    "build:assets": "cp -rf ./lib/server/public ./dist/server/",
+    "build:prepare": "mkdir dist",
+    "build:watch": "yarn clean && yarn build && yarn compile -w",
+    "clean": "del dist",
+    "lint": "../../node_modules/tslint/bin/tslint -c ../../tslint.json 'src/**/*.ts' '__tests__/**/*.ts' --fix"
   },
   "dependencies": {
     "@arkecosystem/core-container": "^0.1.1",
+    "@arkecosystem/core-interfaces": "^2.1.1",
+    "@types/node": "^11.10.4",
+    "@types/sequelize": "^4.27.39",
     "axios": "^0.18.0",
     "boom": "^7.2.0",
+    "del-cli": "^1.1.0",
     "fs-extra": "^7.0.0",
     "h2o2": "^8.1.2",
     "hapi": "^17.5.0",
@@ -29,13 +37,16 @@
     "inert": "^5.1.1",
     "joi": "^13.3.0",
     "micromatch": "^3.1.10",
+    "pg": "^7.8.2",
     "request-ip": "^2.0.2",
     "sequelize": "^4.37.8",
     "sqlite3": "^4.0.2",
+    "typescript": "^3.3.3333",
     "umzug": "^2.1.0",
     "wreck": "^14.1.0"
   },
   "devDependencies": {
+    "@sindresorhus/tsconfig": "^0.2.1",
     "depcheck": "^0.6.9",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
@@ -48,6 +59,7 @@
     "jsdoc": "^3.5.5",
     "prettier": "1.14.3",
     "regenerator-runtime": "^0.11.1",
-    "standard": "^11.0.1"
+    "standard": "^11.0.1",
+    "tsc": "^1.20150623.0"
   }
 }
