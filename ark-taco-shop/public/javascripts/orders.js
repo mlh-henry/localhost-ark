@@ -8,7 +8,7 @@ $(document).ready((function () {
 `);
   const $ordersContainer = $('#orders tbody');
 
-  function updateProductsContainer (content) {
+  function updateOrdersContainer (content) {
     $ordersContainer.html(content);
   }
 
@@ -43,7 +43,7 @@ $(document).ready((function () {
       })
       .catch(function (error) {
         Alerts.showError(error, 'alert-error')
-        updateProductsContainer('<div class="text-center">Sorry, try again later!</span>')
+        updateOrdersContainer('<div class="text-center">Sorry, try again later!</span>')
       });
   }
 

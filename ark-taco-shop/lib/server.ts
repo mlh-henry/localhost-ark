@@ -1,9 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var proxy = require('http-proxy-middleware');
+import createError from 'http-errors';
+import express from 'express';
+import * as path from 'path';
+import proxy from 'http-proxy-middleware';
 
-var buildTacoApiClient = require('./services/buildTacoApiClient');
+import buildTacoApiClient from './services/buildTacoApiClient';
 
 function buildApp (tacoApiConfig) {
   var app = express();
