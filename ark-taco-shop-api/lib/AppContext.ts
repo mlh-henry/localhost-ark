@@ -1,18 +1,18 @@
 import { Logger } from "@arkecosystem/core-interfaces";
 
-export type CoreApiConfig = {
+export interface CoreApiConfig {
   host: string;
   port: string;
-};
+}
 
-export type AppContextConfig = {
+export interface AppContextConfig {
   coreApi: CoreApiConfig;
-};
+}
 
-export type AppContext = {
+export interface AppContext {
   logger: Logger.ILogger;
   config: AppContextConfig;
-};
+}
 
 const logger: Logger.ILogger = {
   make: () => {

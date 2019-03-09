@@ -1,48 +1,48 @@
 "use strict";
 
 import Wreck from "wreck";
-import { Container, Logger } from "@arkecosystem/core-interfaces";
+import { Request, ResponseToolkit } from "hapi";
 
-import AppContext, { CoreApiConfig } from "../../AppContext";
+import AppContext from "../../AppContext";
 import database from "../../database";
+import { RequestOptions } from "../../types/wreck";
 
-const DEFAULT_CORE_API_CONFIG: CoreApiConfig = {
-  host: "localhost",
-  port: "4003"
-};
-
-function getCoreApiUri(path, search) {
+function getCoreApiUri(path: string, search: string): string {
   const {
-    config: { coreApi: { host, port } = DEFAULT_CORE_API_CONFIG } = {}
+    config: {
+      coreApi: { host, port }
+    }
   } = AppContext;
 
   return `http://${host}:${port}${path || ""}${search || ""}`;
 }
 
-function getProxyOptions(request) {
+function getProxyOptions(request: Request): RequestOptions {
   const options = { headers: {}, payload: request.payload };
   options.headers = Object.assign({}, request.headers);
-  // @ts-ignore
-  delete options.headers.host;
+
+  delete options.headers["host"];
   delete options.headers["content-length"];
 
   return options;
 }
 
-function proxyToTransactionCreation(request) {
+function proxyToTransactionCreation(request: Request): Promise<any> {
   const { logger } = AppContext;
 
+  // @ts-ignore
   const { path = "", search = "" } = request.url;
   const uri = getCoreApiUri(path, search);
   const options = getProxyOptions(request);
 
-  logger.info("💻 PROXYING REQUEST");
-  logger.info(JSON.stringify({ path, search, uri, options }));
+  logger.debug(
+    `💻 PROXYING REQUEST ${JSON.stringify({ path, search, uri, options })}`
+  );
 
   return Wreck.request(request.method, uri, options);
 }
 
-function getOrderFromTransaction(payload = []) {
+function getOrderFromTransaction(payload: [object?] = []) {
   // @ts-ignore
   const [transaction = { vendorField: "{}" }] = payload.transactions || [];
   return JSON.parse(transaction.vendorField) || {};
@@ -50,30 +50,32 @@ function getOrderFromTransaction(payload = []) {
 
 /* Intercepts Ark's transactions proxied call to verify if product has balance */
 export default {
-  handler: async (request, reply) => {
+  handler: async (request: Request, h: ResponseToolkit): Promise<object> => {
     const { logger } = AppContext;
 
     try {
-      const { productId } = getOrderFromTransaction(request.payload);
+      const { productId } = getOrderFromTransaction(<[object?]>request.payload);
 
-      // @ts-ignore
       const product = await database.findProductById(productId);
 
       /* If there is not enough balance, we don't create a transaction */
       if (!product || !product.quantity) {
-        return reply.response({ error: "Product out of stock" }).code(400);
+        return h.response({ error: "Product out of stock" }).code(400);
       }
 
       /* If there is enough balance, we update product's balance and create a transaction */
       await product.update({ quantity: product.quantity - 1 });
       const res = await proxyToTransactionCreation(request);
-      return reply
-        .response(res)
-        .code(res.statusCode)
-        .passThrough(true);
+      return (
+        h
+          .response(res)
+          .code(res.statusCode)
+          // @ts-ignore
+          .passThrough(true)
+      );
     } catch (error) {
       logger.error(error.message);
-      return reply.response({ error }).code(400);
+      return h.response({ error }).code(400);
     }
   }
 };

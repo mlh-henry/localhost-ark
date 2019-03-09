@@ -1,9 +1,31 @@
 "use strict";
 
-import Sequelize, { Op } from "sequelize";
+import Sequelize from "sequelize";
 import Umzug from "umzug";
 import path from "path";
+
 import AppContext from "../AppContext";
+import { PaginationParams } from "../server/utils";
+
+export interface ProductAttributes {
+  id: number;
+  code: string;
+  description: string;
+  imageUrl: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface PartialProductAttributes {
+  id?: number;
+  code?: string;
+  description?: string;
+  imageUrl?: string;
+  name?: string;
+  price?: number;
+  quantity?: number;
+}
 
 function runMigrations(connection) {
   const umzug = new Umzug({
@@ -66,7 +88,7 @@ class Database {
 
   getModels = () => this.connection["import"]("./models");
 
-  paginateProduct = params => {
+  paginateProduct = (params: PaginationParams) => {
     const { Product } = this.getModels();
     return Product.findAndCountAll(params);
   };
@@ -76,12 +98,15 @@ class Database {
     return Product.findOrCreate({ where: data, defaults });
   };
 
-  findProductById = id => {
+  findProductById = (id: number) => {
     const { Product } = this.getModels();
     return Product.findByPk(id);
   };
 
-  updateProduct = async (id, data) => {
+  updateProduct = async (
+    id: number,
+    data: PartialProductAttributes
+  ): Promise<ProductAttributes> => {
     const { Product } = this.getModels();
     const product = await Product.findByPk(id);
 

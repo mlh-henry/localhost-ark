@@ -1,45 +1,55 @@
 "use strict";
 
-import database from "../../database";
+import { Request, ResponseToolkit } from "hapi";
+
+import database, { ProductAttributes } from "../../database";
 import utils from "../utils";
 import schema from "../schema";
 
-function getFindOrCreateCallback(upsertProduct, callback) {
-    return function findOrCreateCallback(product, created) {
-        if (!created) {
-            var total = product.quantity + upsertProduct.quantity;
-            // @ts-ignore
-            database.updateProduct(product.id, { quantity: total }).then(callback);
-        } else {
-            callback(product);
-        }
-    };
+function getFindOrCreateCallback(
+  upsertProduct: ProductAttributes,
+  callback: (product: ProductAttributes) => any
+) {
+  return async function findOrCreateCallback(
+    product: ProductAttributes,
+    created: boolean
+  ) {
+    if (!created) {
+      var total = product.quantity + upsertProduct.quantity;
+      const result = await database.updateProduct(product.id, {
+        quantity: total
+      });
+      callback(result);
+    } else {
+      callback(product);
+    }
+  };
 }
 
-function getFindOrCreatePromise(upsertProduct) {
-    return new Promise(function(resolve, reject) {
-        database
-            // @ts-ignore
-            .findOrCreateProduct({ code: upsertProduct.code }, upsertProduct)
-            .spread(getFindOrCreateCallback(upsertProduct, resolve));
-    });
+function getFindOrCreatePromise(upsertProduct: ProductAttributes) {
+  return new Promise(resolve => {
+    database
+      .findOrCreateProduct({ code: upsertProduct.code }, upsertProduct)
+      // @ts-ignore
+      .spread(getFindOrCreateCallback(upsertProduct, resolve));
+  });
 }
 
 exports.create = {
-    async handler(request, h) {
-        const productsToUpsert = request.payload || [];
-        const productsPromises = productsToUpsert.map(getFindOrCreatePromise);
+  async handler(request: Request, h: ResponseToolkit): Promise<object> {
+    const productsToUpsert = <[object?]>request.payload || [];
+    const productsPromises = productsToUpsert.map(getFindOrCreatePromise);
 
-        return Promise.all(productsPromises).then(function(products) {
-            return h.response(utils.respondWithCollection(request, products, "product")).code(201);
-        });
+    return Promise.all(productsPromises).then(products =>
+      h.response(utils.respondWithCollection(products)).code(201)
+    );
+  },
+  options: {
+    plugins: {
+      pagination: {
+        enabled: false
+      }
     },
-    options: {
-        plugins: {
-            pagination: {
-                enabled: false,
-            },
-        },
-        validate: schema.createInventory,
-    },
+    validate: schema.createInventory
+  }
 };
