@@ -3,29 +3,30 @@ import * as crypto from "@arkecosystem/crypto";
 
 const version = 2;
 
+export interface TacoApiOptions {
+  sender: string;
+  passphrase: string;
+  recipient: string;
+  uri: string;
+}
+
+interface ProductParams {
+  id?: number;
+  price: number;
+}
+
 async function createAndPostTransaction(
-  sender,
-  passphrase,
-  recipient,
-  tacoApiUri,
-  params = {}
+  sender: string,
+  passphrase: string,
+  recipient: string,
+  tacoApiUri: string,
+  params: ProductParams
 ) {
   const client = new Client(tacoApiUri, version);
-  // @ts-ignore
   const { price = 0 } = params;
-  console.info("createAndPostTransaction", {
-    sender,
-    passphrase,
-    client,
-    price
-  });
 
   const senderWallet = await getWallet(sender);
-  console.log("TCL: senderWallet", { sender, senderWallet });
   const recipientWallet = await getWallet(recipient);
-  console.log("TCL: recipientWallet", recipientWallet);
-
-  console.info("createAndPostTransaction", { senderWallet, recipientWallet });
 
   try {
     const transaction = await postTransaction({
@@ -44,7 +45,6 @@ async function createAndPostTransaction(
       const { data } = await client.resource("wallets").get(address);
       return data.data;
     } catch (error) {
-      console.error("🚫 eror getting wallet", error);
       throw error;
     }
   }
@@ -65,8 +65,6 @@ async function createAndPostTransaction(
         .sign(passphrase)
         .getStruct();
 
-      console.info("TRANSACTION", transaction);
-
       await client
         .resource("transactions")
         .create({ transactions: [transaction] });
@@ -79,12 +77,15 @@ async function createAndPostTransaction(
   }
 }
 
-async function fetchTransactions(tacoApiUri, sender, recipientId) {
+async function fetchTransactions(
+  tacoApiUri: string,
+  sender: string,
+  recipientId: string
+) {
   const client = new Client(tacoApiUri, version);
   const { data: { data: transactions = [] } = {} } = await client
     .resource("transactions")
     .all({ recipientId });
-  console.log({ transactions: transactions.length });
 
   const filteredTransactions = (transactions || []).filter(function(
     transaction
@@ -107,22 +108,18 @@ async function fetchTransactions(tacoApiUri, sender, recipientId) {
   });
 }
 
-export default function buildTacoApiClient(config) {
+export default function buildTacoApiClient(config: TacoApiOptions) {
   const { sender, passphrase, recipient, uri } = config;
-  console.log("Building apiClient", { sender, passphrase, recipient, uri });
 
   return {
     listTransactions: async function listTransactions() {
-      console.log("listing transaction");
       try {
         return fetchTransactions(uri, sender, recipient);
       } catch (error) {
-        console.error("🚫 error fetching transactions", error);
         throw error;
       }
     },
-    postTransaction: async function postTransaction(params) {
-      console.log("posting transaction", params);
+    postTransaction: async function postTransaction(params: ProductParams) {
       try {
         const transaction = await createAndPostTransaction(
           sender,

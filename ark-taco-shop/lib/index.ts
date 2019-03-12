@@ -1,15 +1,29 @@
 "use strict";
 
 import * as http from "http";
+import Server, { TacoApiOptions } from "./server";
+import { Logger, Container } from "@arkecosystem/core-interfaces";
+
+interface ServerOptions {
+  enabled: boolean;
+  host: string;
+  port: number;
+}
+
+interface Options {
+  enabled: boolean;
+  inventoryApi: TacoApiOptions;
+  server: ServerOptions;
+}
 
 export const plugin = {
   pkg: require("../package.json"),
   defaults: require("./defaults"),
   alias: "ark-taco-shop",
-  async register(container, options) {
-    const logger = container.resolvePlugin("logger");
+  async register(container: Container.IContainer, options: Options) {
+    const logger = container.resolvePlugin<Logger.ILogger>("logger");
     const config = options.inventoryApi;
-    const app = require("./server")(config);
+    const app = Server(config);
 
     function onListening() {
       var addr = server.address();
@@ -36,7 +50,7 @@ export const plugin = {
       }
 
       if (options.server.enabled) {
-        var port = options.server.port;
+        const port = options.server.port;
         app.set("port", port);
 
         var server = http.createServer(app);
@@ -53,7 +67,7 @@ export const plugin = {
     }
   },
 
-  async deregister(container, options) {
+  async deregister(container: Container.IContainer, options: Options) {
     if (options.enabled) {
       container.resolvePlugin("logger").info("Stopping ark-taco-shop");
       const plugin = container.resolvePlugin("ark-taco-shop");
