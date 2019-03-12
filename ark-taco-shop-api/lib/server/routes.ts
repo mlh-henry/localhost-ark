@@ -1,6 +1,6 @@
 "use strict";
 
-import { Container, Logger } from "@arkecosystem/core-interfaces";
+import { Server } from "hapi";
 
 import AppContext from "../AppContext";
 const productsHandlers = require("./handlers/products");
@@ -9,7 +9,7 @@ import transactionsHandler from "./handlers/transactions";
 
 const DEFAULT_CORE_API_CONFIG = { host: "localhost", port: "4003" };
 
-const register = async server => {
+const register = async (server: Server) => {
   var { config: { coreApi = DEFAULT_CORE_API_CONFIG } = {} } = AppContext;
 
   server.route([

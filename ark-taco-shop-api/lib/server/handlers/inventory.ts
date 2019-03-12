@@ -2,47 +2,59 @@
 
 import { Request, ResponseToolkit } from "hapi";
 
-import database, { ProductAttributes } from "../../database";
-import utils from "../utils";
+import database from "../../database";
+import {
+  ProductAttributes,
+  ProductInstance
+} from "../../database/models/product";
 import schema from "../schema";
+import utils from "../utils";
 
 function getFindOrCreateCallback(
   upsertProduct: ProductAttributes,
-  callback: (product: ProductAttributes) => any
+  callback: (product: ProductInstance) => any
 ) {
   return async function findOrCreateCallback(
-    product: ProductAttributes,
+    persistedProduct: ProductInstance,
     created: boolean
   ) {
+    const { Product } = database;
+
     if (!created) {
-      var total = product.quantity + upsertProduct.quantity;
-      const result = await database.updateProduct(product.id, {
+      const total = persistedProduct.quantity + upsertProduct.quantity;
+      const product = await Product.findByPk(persistedProduct.id);
+
+      const result = await product.update({
         quantity: total
       });
       callback(result);
     } else {
-      callback(product);
+      callback(persistedProduct);
     }
   };
 }
 
-function getFindOrCreatePromise(upsertProduct: ProductAttributes) {
+function getFindOrCreatePromise(
+  upsertProduct: ProductAttributes
+): Promise<ProductInstance> {
   return new Promise(resolve => {
-    database
-      .findOrCreateProduct({ code: upsertProduct.code }, upsertProduct)
-      // @ts-ignore
-      .spread(getFindOrCreateCallback(upsertProduct, resolve));
+    const { Product } = database;
+
+    return Product.findOrCreate({
+      where: { code: upsertProduct.code },
+      defaults: upsertProduct
+    }).spread(getFindOrCreateCallback(upsertProduct, resolve));
   });
 }
 
 exports.create = {
-  async handler(request: Request, h: ResponseToolkit): Promise<object> {
-    const productsToUpsert = <[object?]>request.payload || [];
+  async handler(request: Request, h: ResponseToolkit) {
+    const productsToUpsert = <ProductAttributes[]>request.payload || [];
     const productsPromises = productsToUpsert.map(getFindOrCreatePromise);
 
-    return Promise.all(productsPromises).then(products =>
-      h.response(utils.respondWithCollection(products)).code(201)
-    );
+    const products = await Promise.all(productsPromises);
+
+    return h.response(utils.respondWithCollection(products)).code(201);
   },
   options: {
     plugins: {

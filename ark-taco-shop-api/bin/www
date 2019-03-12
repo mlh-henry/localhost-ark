@@ -11,7 +11,6 @@ var http = require("http");
 
 (async function() {
   const { logger } = AppContext;
-  logger.info("Starting 🔩🔫");
 
   try {
     if (!config.enabled) {
@@ -20,15 +19,11 @@ var http = require("http");
       return null;
     }
 
-    logger.info("DB SETUP 🔫🔫", { database });
-    // @ts-ignore
     await database.setUp(config.database);
 
-    logger.info("SERVER SETUP 🔫🔩🔫");
     if (config.server.enabled) {
       debugger;
       logger.info(config.server);
-      // @ts-ignore
       const server = Server(config.server);
 
       // var port = normalizePort(process.env.PORT || "5000");

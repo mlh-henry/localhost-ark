@@ -2,30 +2,11 @@
 
 import Sequelize from "sequelize";
 import Umzug from "umzug";
+import { Logger } from "@arkecosystem/core-interfaces";
 import path from "path";
 
 import AppContext from "../AppContext";
-import { PaginationParams } from "../server/utils";
-
-export interface ProductAttributes {
-  id: number;
-  code: string;
-  description: string;
-  imageUrl: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-export interface PartialProductAttributes {
-  id?: number;
-  code?: string;
-  description?: string;
-  imageUrl?: string;
-  name?: string;
-  price?: number;
-  quantity?: number;
-}
+import { initProduct, ProductModel } from "./models/product";
 
 function runMigrations(connection) {
   const umzug = new Umzug({
@@ -45,16 +26,17 @@ function runMigrations(connection) {
 export type DatabaseOptions = Sequelize.Options;
 
 class Database {
-  connection = null;
-  logger = null;
+  connection: Sequelize.Sequelize = null;
+  logger: Logger.ILogger = null;
+  Product: ProductModel = null;
 
   executeMigrations = async () => {
     try {
       await runMigrations(this.connection);
     } catch (error) {
-      this.logger.error("Error while running migrations", error);
-      // TODO no exit here?
-      process.exit(1);
+      this.logger.error("Error while running migrations");
+      this.logger.error(error);
+      throw error;
     }
   };
 
@@ -64,18 +46,15 @@ class Database {
       return;
     }
 
-    const sequelizeOptions: Sequelize.Options = {
-      ...config,
-      ...{ logging: false }
-    };
-    this.connection = new Sequelize(sequelizeOptions);
+    this.connection = new Sequelize(config);
 
     try {
       await this.connection.authenticate();
     } catch (error) {
-      this.logger.error("Unable to connect to the database", error);
-      // TODO no exit here?
-      process.exit(1);
+      this.logger.error("Unable to connect to the database");
+      this.logger.error(error);
+
+      throw error;
     }
   };
 
@@ -84,33 +63,7 @@ class Database {
 
     await this.setUpConnection(config);
     await this.executeMigrations();
-  };
-
-  getModels = () => this.connection["import"]("./models");
-
-  paginateProduct = (params: PaginationParams) => {
-    const { Product } = this.getModels();
-    return Product.findAndCountAll(params);
-  };
-
-  findOrCreateProduct = (data, defaults = {}) => {
-    const { Product } = this.getModels();
-    return Product.findOrCreate({ where: data, defaults });
-  };
-
-  findProductById = (id: number) => {
-    const { Product } = this.getModels();
-    return Product.findByPk(id);
-  };
-
-  updateProduct = async (
-    id: number,
-    data: PartialProductAttributes
-  ): Promise<ProductAttributes> => {
-    const { Product } = this.getModels();
-    const product = await Product.findByPk(id);
-
-    return product.update(data);
+    this.Product = initProduct(this.connection);
   };
 }
 

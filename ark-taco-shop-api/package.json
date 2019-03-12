@@ -25,11 +25,6 @@
   "dependencies": {
     "@arkecosystem/core-container": "^0.1.1",
     "@arkecosystem/core-interfaces": "^2.1.1",
-    "@types/boom": "^7.2.1",
-    "@types/hapi": "^18.0.1",
-    "@types/node": "^11.10.4",
-    "@types/sequelize": "^4.27.39",
-    "@types/wreck": "^14.0.0",
     "axios": "^0.18.0",
     "boom": "^7.2.0",
     "del-cli": "^1.1.0",
@@ -50,6 +45,11 @@
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^0.2.1",
+    "@types/boom": "^7.2.1",
+    "@types/hapi": "^18.0.1",
+    "@types/node": "^11.10.4",
+    "@types/sequelize": "^4.27.39",
+    "@types/wreck": "^14.0.0",
     "depcheck": "^0.6.9",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",

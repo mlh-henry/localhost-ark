@@ -29,18 +29,14 @@ export const plugin = {
 
       await database.setUp(options.database);
 
-      logger.info("SERVER SETUP 🔫🔩🔫");
       if (options.server.enabled) {
-        logger.info(JSON.stringify(options.server));
-        // @ts-ignore
-        return Server(options.server, container);
+        return Server(options.server);
       }
 
       logger.info("ark-taco-shop-api server is disabled :grey_exclamation:");
       return null;
     } catch (error) {
-      logger.error("ERROR");
-      logger.error(error.stack);
+      logger.error(error);
       return process.exit(1);
     }
   },

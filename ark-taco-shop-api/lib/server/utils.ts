@@ -1,19 +1,23 @@
 "use strict";
 import { Request } from "hapi";
 
-export interface PaginatedResults {
-  results: [Object];
+export interface PaginatedResults<T> {
+  results: T[];
   totalCount: Number;
 }
 
-export interface PaginableData {
-  rows: [Object];
+export interface PaginableData<T> {
+  rows: T[];
   count: Number;
 }
 
 export interface PaginationParams {
   offset: number;
   limit: number;
+}
+
+export interface HandlerResponse<T> {
+  data: T;
 }
 
 const paginate = (request: Request): PaginationParams => ({
@@ -23,11 +27,11 @@ const paginate = (request: Request): PaginationParams => ({
   limit: Number(request.query.limit) || 100
 });
 
-const respondWithCollection = (data: Object): Object => ({ data });
-const toPagination = ({
+const respondWithCollection = <T>(data: T): HandlerResponse<T> => ({ data });
+const toPagination = <T>({
   rows: results,
   count: totalCount
-}: PaginableData): PaginatedResults => ({
+}: PaginableData<T>): PaginatedResults<T> => ({
   results,
   totalCount
 });
