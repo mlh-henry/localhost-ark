@@ -64,7 +64,7 @@ export default async (options: ServerOptions): Promise<Server> => {
   await server.start();
 
   logger.info(
-    `ark-taco-shop-api available and listening on ${server.info.uri}`
+    `🌮 ark-taco-shop-api available and listening on ${server.info.uri}`
   );
 
   return server;

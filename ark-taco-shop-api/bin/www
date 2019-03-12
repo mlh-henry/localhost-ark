@@ -15,7 +15,7 @@ var http = require("http");
   try {
     if (!config.enabled) {
       debugger;
-      logger.info("ark-taco-shop-api is disabled :grey_exclamation:");
+      logger.info("🌮 ark-taco-shop-api is disabled :grey_exclamation:");
       return null;
     }
 
@@ -36,7 +36,7 @@ var http = require("http");
       // server.on("listening", onListening);
     }
   } catch (error) {
-    logger.error("ERROR");
+    logger.error("🌮 ERROR");
     logger.error(error.stack);
     return process.exit(1);
   }

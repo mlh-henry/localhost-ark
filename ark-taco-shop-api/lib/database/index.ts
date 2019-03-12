@@ -34,7 +34,7 @@ class Database {
     try {
       await runMigrations(this.connection);
     } catch (error) {
-      this.logger.error("Error while running migrations");
+      this.logger.error("🌮 Error while running migrations");
       this.logger.error(error);
       throw error;
     }
@@ -51,7 +51,7 @@ class Database {
     try {
       await this.connection.authenticate();
     } catch (error) {
-      this.logger.error("Unable to connect to the database");
+      this.logger.error("🌮 Unable to connect to the database");
       this.logger.error(error);
 
       throw error;

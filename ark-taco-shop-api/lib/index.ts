@@ -23,7 +23,7 @@ export const plugin = {
 
     try {
       if (!options.enabled) {
-        logger.info("ark-taco-shop-api is disabled :grey_exclamation:");
+        logger.info("🌮 ark-taco-shop-api is disabled :grey_exclamation:");
         return null;
       }
 
@@ -33,16 +33,17 @@ export const plugin = {
         return Server(options.server);
       }
 
-      logger.info("ark-taco-shop-api server is disabled :grey_exclamation:");
+      logger.info("🌮 ark-taco-shop-api server is disabled :grey_exclamation:");
       return null;
     } catch (error) {
+      logger.error("🌮 Error starting ark-taco-shop-api")
       logger.error(error);
       return process.exit(1);
     }
   },
   async deregister(container, options) {
     if (options.server.enabled) {
-      container.resolvePlugin("logger").info("Stopping ark-taco-shop-api");
+      container.resolvePlugin("logger").info("🌮 Stopping ark-taco-shop-api");
 
       return container.resolvePlugin("ark-taco-shop-api").stop();
     }

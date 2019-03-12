@@ -29,7 +29,7 @@ export const plugin = {
       var addr = server.address();
       var bind =
         typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-      logger.info(`ark-taco-shop-api available and listening on ${bind}`);
+      logger.info(`🌮 ark-taco-shop available and listening on ${bind}`);
     }
 
     try {
@@ -45,7 +45,7 @@ export const plugin = {
           );
         }
 
-        logger.info("ark-taco-shop is disabled :grey_exclamation:");
+        logger.info("🌮 ark-taco-shop is disabled :grey_exclamation:");
         return;
       }
 
@@ -60,7 +60,7 @@ export const plugin = {
         return;
       }
 
-      logger.info("ark-taco-shop server is disabled :grey_exclamation:");
+      logger.info("🌮 ark-taco-shop server is disabled :grey_exclamation:");
     } catch (error) {
       logger.error(error);
       process.exit(1);
@@ -69,7 +69,7 @@ export const plugin = {
 
   async deregister(container: Container.IContainer, options: Options) {
     if (options.enabled) {
-      container.resolvePlugin("logger").info("Stopping ark-taco-shop");
+      container.resolvePlugin("logger").info("🌮 Stopping ark-taco-shop");
       const plugin = container.resolvePlugin("ark-taco-shop");
 
       if (plugin) {

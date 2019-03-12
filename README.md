@@ -13,13 +13,17 @@ Make sure you’ve got a recent version of:
 To begin, create a root folder to contain the ark core and the ark-taco-shop components.
 
 ```sh
+mkdir ~/ark-project
+
+cd ~/ark-project
+
 git clone https://github.com/arkecosystem/core
 cd core
 
 npm i -g yarn
 
-git fetch https://github.com/arkecosystem/core develop:develop
-git checkout develop
+git fetch https://github.com/arkecosystem/core 2.2.1:2.2.1
+git checkout 2.2.1
 
 yarn setup
 
@@ -33,15 +37,19 @@ We will use ARK core's docker files to make it easier to create/manage the datab
 ##### Creating database using docker
 
 ```sh
-cd ~/core/docker/development/devnet
+cd ~/ark-project
+
+cd core/docker/development/testnet
 docker login
-docker-compose up
+docker-compose up -d postgres
 docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
 ```
 
 If you need to remove it, you can run the following:
 ```sh
-cd ~/core/docker/development
+cd ~/ark-project
+
+cd ~/core/docker/development/testnet
 sh purge.sh
 ```
 
@@ -50,7 +58,7 @@ sh purge.sh
 Clone the `MLH/localhost-ark` repository:
 
 ```sh
-cd ~/core/plugins
+cd ~/ark-project
 git clone https://github.com/MLH/localhost-ark
 ```
 
@@ -62,13 +70,13 @@ This repository contains two different plugins:
 #### The server - Ark Taco Shop Api
 To install the server, copy the `ark-taco-shop-api` plugin to the ARK core's `plugins` folder:
 ```sh
-cd ~/core
+cd ~/ark-project
 cp -rf localhost-ark/ark-taco-shop-api core/plugins/
 ```
 
 ##### Configuration
 
-We will be using `testnet` as a local network to run ARK. To configure it, modify the file ` core/packages/core/lib/config/testnet/plugins.js` and copy the configuration object from of the file `localhost-ark/ark-taco-shop-api/lib/defaults.js`, and add it like showed below:
+We will be using `testnet` as a local network to run ARK. To configure it, modify the file `core/packages/core/bin/config/testnet/plugins.js` and copy the contents of the configuration object from the file `localhost-ark/ark-taco-shop-api/lib/defaults.js`, and append it to the `plugins.js` file, like showed below:
 ```js
 {
   '@arkecosystem/core-event-emitter': {},
@@ -99,14 +107,15 @@ Make sure to change the `database` properties to use the database configs you ha
 ##### Install dependencies
 
 ```sh
-cd ~/core
+cd ~/ark-project
 cd core
+yarn setup
 lerna bootstrap
 ```
 
 ##### Run the application
 ```sh
-cd ~/core
+cd ~/ark-project
 cd core/packages/core
 yarn full:testnet
 ```
@@ -140,7 +149,7 @@ There is an example file:  `localhost-ark/ark-taco-shop-api/inventory-file-examp
 #### The client - Ark Taco Shop
 To install the client, copy the `ark-taco-shop` plugin to the ARK core's `plugins` folder:
 ```sh
-cd ~/core
+cd ~/ark-project
 cp -rf localhost-ark/ark-taco-shop core/plugins/
 ```
 
@@ -178,13 +187,15 @@ Notes:
 ##### Install dependencies
 
 ```sh
-cd ~/core
-lerna bootstrap
+cd ~/ark-project
+cd core
+yarn setup && lerna bootstrap
 ```
 
 ##### Run the application
 ```sh
-cd ~/core/packages/core
+cd ~/ark-project
+cd core/packages/core
 yarn full:testnet
 ```
 
