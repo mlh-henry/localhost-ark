@@ -36,13 +36,15 @@ We will use ARK core's docker files to make it easier to create/manage the datab
 
 ##### Creating database using docker
 
+Note: You might not need to use ```sudo``` if you are logged in as ```root``` 
+
 ```sh
 cd ~/ark-project
 
 cd core/docker/development/testnet
-docker login
-docker-compose up -d postgres
-docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
+sudo docker login
+sudo docker-compose up -d postgres
+sudo docker exec -it ark-development-postgres /bin/bash -c "createdb -U ark ark_testnet"
 ```
 
 If you need to remove it, you can run the following:
